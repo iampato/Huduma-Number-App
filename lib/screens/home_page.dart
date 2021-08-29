@@ -2,8 +2,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:huduma/cubit/huduma_cubit.dart';
-import 'models/huduma_response.dart';
+import 'package:huduma/cubit/huduma/huduma_cubit.dart';
+import 'package:huduma/cubit/huduma_repo_dao.dart';
+import 'package:provider/provider.dart';
+import '../models/huduma_response.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -13,19 +15,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController _controller = TextEditingController();
-  HudumaCubit hudumaCubit = HudumaCubit();
+  late HudumaCubit hudumaCubit;
+  late String idNumber;
+  final _formKey = GlobalKey<FormState>();
 
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      setState(() {});
-    });
+  }
+
+  void didChangeDependencies() {
+    hudumaCubit = HudumaCubit(
+      Provider.of<HudumaResponseDao>(context),
+    );
+    super.didChangeDependencies();
   }
 
   void dispose() {
     super.dispose();
-    _controller.dispose();
     hudumaCubit.close();
   }
 
@@ -36,15 +42,14 @@ class _MyHomePageState extends State<MyHomePage> {
         return hudumaCubit;
       },
       child: Scaffold(
+        backgroundColor: Color(0xFF800000),
+        resizeToAvoidBottomInset: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Flexible(
-              child: buildUpperPart(context),
-            ),
-            // Flexible(
-            //   child: buildLowerPart(context),
-            // ),
+            buildUpperPart(context),
+            buildLowerPart(context),
           ],
         ),
       ),
@@ -69,15 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
       builder: (context, state) {
-        return Container(
-          color: Color(0xFF800000),
-          width: double.infinity,
+        return Form(
+          key: _formKey,
           child: Column(
             // mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                  top: kToolbarHeight,
+                  top: kToolbarHeight * 0.8,
                   left: 15,
                   right: 5,
                 ),
@@ -156,15 +160,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   bottom: 5,
                 ),
                 child: TextFormField(
-                  controller: _controller,
+                  onSaved: (value) {
+                    idNumber = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Field cannot be empty";
+                    }
+                  },
                   keyboardType: TextInputType.number,
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: "Enter Id number",
                     hintStyle: TextStyle(color: Colors.white70),
+                    errorStyle: TextStyle(color: Colors.orange),
                     contentPadding: EdgeInsets.only(left: 5.0),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white70),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white70),
@@ -182,16 +197,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.green,
-                    minimumSize: Size(double.infinity, 35),
+                    minimumSize: Size(double.infinity, 40),
                   ),
-                  onPressed: _controller.text == ""
-                      ? null
-                      : () {
-                          FocusScope.of(context).unfocus();
-                          hudumaCubit.checkHudumaNumberState(
-                            idNumber: _controller.text,
-                          );
-                        },
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      hudumaCubit.checkHudumaNumberState(
+                        idNumber: idNumber,
+                      );
+                    }
+                  },
                   child: state == HudumaState.loading()
                       ? SizedBox(
                           width: 20,
@@ -201,7 +217,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.white,
                           ),
                         )
-                      : Text("Check card status"),
+                      : Text(
+                          "Check card status",
+                          style: TextStyle(fontSize: 15),
+                        ),
                 ),
               ),
             ],
@@ -313,55 +332,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildLowerPart(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 15,
-            top: 10,
-            bottom: 0,
-          ),
-          child: Text(
-            "Previous search results:",
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
-          ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15.0,
+        vertical: 10.0,
+      ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          minimumSize: Size(double.infinity, 40),
         ),
-        Flexible(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: RichText(
-                  text: TextSpan(
-                    text: "ID No: ",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: "36433941",
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                leading: CircleAvatar(
-                  backgroundColor: Colors.red.withOpacity(0.1),
-                  child: Icon(Icons.done, color: Colors.black),
-                ),
-                subtitle: Text("success"),
-              );
-            },
-          ),
-        )
-      ],
+        onPressed: () {
+          Navigator.pushNamed(context, "/history");
+        },
+        child: Text(
+          "View search history",
+          style: TextStyle(color: Colors.black, fontSize: 15),
+        ),
+      ),
     );
   }
 }

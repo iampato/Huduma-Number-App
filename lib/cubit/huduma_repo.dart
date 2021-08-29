@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:huduma/models/huduma_response.dart';
+
 
 class HudumaRepo {
   // get HTTP Huduma status
@@ -14,7 +14,6 @@ class HudumaRepo {
       );
       if (response.statusCode == 200) {
         HudumaResponse res = HudumaResponse.fromJson(response.data);
-        debugPrint('$res');
         return res;
       } else {
         throw Exception("An error occurred");
