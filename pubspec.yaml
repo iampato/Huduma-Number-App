@@ -19,9 +19,14 @@ dependencies:
   google_fonts: ^2.1.0
   hydrated_bloc: ^7.0.1
   json_annotation: ^4.0.1
+  moor: ^4.3.2
   path: ^1.8.0
+  path_provider: ^2.0.2
+  sqlite3_flutter_libs: ^0.5.0
+  provider: 
 
 dev_dependencies:
+  moor_generator: ^4.3.1
   build_runner: ^2.0.6
   flutter_test:
     sdk: flutter
