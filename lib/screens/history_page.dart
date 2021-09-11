@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:huduma/cubit/huduma/huduma_cubit.dart';
 import 'package:huduma/cubit/huduma_records/hudumarecords_cubit.dart';
 import 'package:huduma/cubit/huduma_repo_dao.dart';
 import 'package:huduma/models/huduma_response.dart';
@@ -31,7 +32,19 @@ class _HistoryPageState extends State<HistoryPage> {
           title: Text("Search history"),
         ),
         body: BlocConsumer<HudumarecordsCubit, HudumarecordsState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            state.when(
+              initial: () {},
+              loaded: (data, msg) {
+                if (msg != "") {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(msg)),
+                  );
+                }
+              },
+              error: (error) {},
+            );
+          },
           builder: (context, state) {
             return state.when(
               initial: () {
@@ -54,9 +67,15 @@ class _HistoryPageState extends State<HistoryPage> {
                         },
                         itemBuilder: (context, index) {
                           var singleItem = data[index];
-                          return SearchHistoryItem(
-                            key: Key(""),
-                            hudumaResponse: singleItem,
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              top: index == 0 ? 10 : 0,
+                            ),
+                            child: SearchHistoryItem(
+                              key: UniqueKey(),
+                              hudumaResponse: singleItem,
+                              hudumarecordsCubit: hudumarecordsCubit,
+                            ),
                           );
                         },
                       );
@@ -75,10 +94,12 @@ class _HistoryPageState extends State<HistoryPage> {
 }
 
 class SearchHistoryItem extends StatefulWidget {
-  final HudumaResponse? hudumaResponse;
+  final HudumaResponse hudumaResponse;
+  final HudumarecordsCubit hudumarecordsCubit;
   const SearchHistoryItem({
     Key? key,
     required this.hudumaResponse,
+    required this.hudumarecordsCubit,
   }) : super(key: key);
 
   @override
@@ -86,7 +107,8 @@ class SearchHistoryItem extends StatefulWidget {
 }
 
 class _SearchHistoryItemState extends State<SearchHistoryItem> {
-  HudumaResponse get data => widget.hudumaResponse!;
+  HudumaResponse get data => widget.hudumaResponse;
+  HudumarecordsCubit get hudumarecordsCubit => widget.hudumarecordsCubit;
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
@@ -96,6 +118,7 @@ class _SearchHistoryItemState extends State<SearchHistoryItem> {
       elevation: 0,
       children: [
         ExpansionPanel(
+          canTapOnHeader: true,
           body: Padding(
             padding: EdgeInsets.all(10),
             child: Column(
@@ -138,13 +161,19 @@ class _SearchHistoryItemState extends State<SearchHistoryItem> {
                       MaterialButton(
                         color: Colors.green,
                         elevation: 0,
-                        onPressed: (){},
+                        onPressed: () {
+                          hudumarecordsCubit.checkHudumaNumberState(
+                            idNumber: data.idNumber,
+                          );
+                        },
                         child: Text("Re-check"),
                       ),
                       MaterialButton(
                         color: Colors.deepOrange,
                         elevation: 0,
-                        onPressed: (){},
+                        onPressed: () {
+                          hudumarecordsCubit.deleteRecord(data.idNumber);
+                        },
                         child: Text("Delete"),
                       )
                     ],
@@ -180,7 +209,7 @@ class _SearchHistoryItemState extends State<SearchHistoryItem> {
               ],
             );
           },
-          isExpanded: isExpanded, //itemData[index].expanded,
+          isExpanded: isExpanded,
         )
       ],
       expansionCallback: (int item, bool status) {

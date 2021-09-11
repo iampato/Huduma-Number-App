@@ -23,5 +23,14 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
+        return m.createAll();
+      }, onUpgrade: (Migrator m, int from, int to) async {
+        if (from == 1) {
+          await m.alterTable(TableMigration(hudumDbResponse));
+        }
+      });
 }

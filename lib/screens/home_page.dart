@@ -42,8 +42,42 @@ class _MyHomePageState extends State<MyHomePage> {
         return hudumaCubit;
       },
       child: Scaffold(
-        backgroundColor: Colors.red,
+        // backgroundColor: Colors.red,
         resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(
+            "Huduma Number Self-check",
+          ),
+          centerTitle: false,
+          actions: [
+            IconButton(
+              icon: Icon(
+                CupertinoIcons.info,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Public Caution",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      content: Text(
+                        "I am not responsible for any information in this software" +
+                            "hence I am not realible for any action you may take. \n \n" +
+                            "Also any use of this software, does not directly attach to me",
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          ],
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,50 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             // mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: kToolbarHeight * 0.65,
-                  left: 15,
-                  right: 5,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Huduma Number Self-check",
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
-                            color: Colors.white,
-                          ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        CupertinoIcons.info,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(
-                                "Public Caution",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              content: Text(
-                                "I am not responsible for any information in this software" +
-                                    "hence I am not realible for any action you may take. \n \n" +
-                                    "Also any use of this software, does not directly attach to me",
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ),
+              
               Padding(
                 padding: const EdgeInsets.only(
                   left: 15,
@@ -132,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text(
                   "Get your Huduma Card registration status and delivery address confirmation.",
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: Colors.white.withOpacity(0.8),
+                        // color: Colors.white.withOpacity(0.8),
                         fontWeight: FontWeight.w700,
                       ),
                 ),
@@ -148,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       "population database which will be the 'single source of truth' on a person's identity.",
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
-                    color: Colors.white70,
+                    // color: Colors.white70,
                   ),
                 ),
               ),
@@ -169,23 +160,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                   },
                   keyboardType: TextInputType.number,
-                  style: TextStyle(color: Colors.white),
+                  // style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: "Enter Id number",
-                    hintStyle: TextStyle(color: Colors.white70),
+                    // hintStyle: TextStyle(color: Colors.white70),
                     errorStyle: TextStyle(color: Colors.orange),
                     contentPadding: EdgeInsets.only(left: 5.0),
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70),
+                      // borderSide: BorderSide(color: Colors.white70),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange),
+                      // borderSide: BorderSide(color: Colors.orange),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70),
+                      // borderSide: BorderSide(color: Colors.white70),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                      // borderSide: BorderSide(color: Colors.white),
                     ),
                   ),
                 ),
@@ -193,11 +184,12 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15.0,
+                  vertical: 5.0,
                 ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.green,
-                    minimumSize: Size(double.infinity, 40),
+                    minimumSize: Size(double.infinity, 50),
                   ),
                   onPressed: () {
                     FocusScope.of(context).unfocus();
@@ -339,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
+          primary: Colors.red,
           minimumSize: Size(double.infinity, 40),
         ),
         onPressed: () {
