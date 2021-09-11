@@ -9,8 +9,7 @@ part of 'moor_utils.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class HudumDbResponseData extends DataClass
     implements Insertable<HudumDbResponseData> {
-  final int id;
-  final String? idNumber;
+  final String idNumber;
   final String? status;
   final String? printingStatus;
   final String? collectionStatus;
@@ -18,8 +17,7 @@ class HudumDbResponseData extends DataClass
   final String? message;
   final DateTime createdAt;
   HudumDbResponseData(
-      {required this.id,
-      this.idNumber,
+      {required this.idNumber,
       this.status,
       this.printingStatus,
       this.collectionStatus,
@@ -31,10 +29,8 @@ class HudumDbResponseData extends DataClass
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return HudumDbResponseData(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       idNumber: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id_number']),
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_number'])!,
       status: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}status']),
       printingStatus: const StringType()
@@ -52,10 +48,7 @@ class HudumDbResponseData extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    if (!nullToAbsent || idNumber != null) {
-      map['id_number'] = Variable<String?>(idNumber);
-    }
+    map['id_number'] = Variable<String>(idNumber);
     if (!nullToAbsent || status != null) {
       map['status'] = Variable<String?>(status);
     }
@@ -77,10 +70,7 @@ class HudumDbResponseData extends DataClass
 
   HudumDbResponseCompanion toCompanion(bool nullToAbsent) {
     return HudumDbResponseCompanion(
-      id: Value(id),
-      idNumber: idNumber == null && nullToAbsent
-          ? const Value.absent()
-          : Value(idNumber),
+      idNumber: Value(idNumber),
       status:
           status == null && nullToAbsent ? const Value.absent() : Value(status),
       printingStatus: printingStatus == null && nullToAbsent
@@ -103,8 +93,7 @@ class HudumDbResponseData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return HudumDbResponseData(
-      id: serializer.fromJson<int>(json['id']),
-      idNumber: serializer.fromJson<String?>(json['idNumber']),
+      idNumber: serializer.fromJson<String>(json['idNumber']),
       status: serializer.fromJson<String?>(json['status']),
       printingStatus: serializer.fromJson<String?>(json['printingStatus']),
       collectionStatus: serializer.fromJson<String?>(json['collectionStatus']),
@@ -117,8 +106,7 @@ class HudumDbResponseData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'idNumber': serializer.toJson<String?>(idNumber),
+      'idNumber': serializer.toJson<String>(idNumber),
       'status': serializer.toJson<String?>(status),
       'printingStatus': serializer.toJson<String?>(printingStatus),
       'collectionStatus': serializer.toJson<String?>(collectionStatus),
@@ -129,8 +117,7 @@ class HudumDbResponseData extends DataClass
   }
 
   HudumDbResponseData copyWith(
-          {int? id,
-          String? idNumber,
+          {String? idNumber,
           String? status,
           String? printingStatus,
           String? collectionStatus,
@@ -138,7 +125,6 @@ class HudumDbResponseData extends DataClass
           String? message,
           DateTime? createdAt}) =>
       HudumDbResponseData(
-        id: id ?? this.id,
         idNumber: idNumber ?? this.idNumber,
         status: status ?? this.status,
         printingStatus: printingStatus ?? this.printingStatus,
@@ -150,7 +136,6 @@ class HudumDbResponseData extends DataClass
   @override
   String toString() {
     return (StringBuffer('HudumDbResponseData(')
-          ..write('id: $id, ')
           ..write('idNumber: $idNumber, ')
           ..write('status: $status, ')
           ..write('printingStatus: $printingStatus, ')
@@ -164,22 +149,19 @@ class HudumDbResponseData extends DataClass
 
   @override
   int get hashCode => $mrjf($mrjc(
-      id.hashCode,
+      idNumber.hashCode,
       $mrjc(
-          idNumber.hashCode,
+          status.hashCode,
           $mrjc(
-              status.hashCode,
+              printingStatus.hashCode,
               $mrjc(
-                  printingStatus.hashCode,
-                  $mrjc(
-                      collectionStatus.hashCode,
-                      $mrjc(deliveryPoint.hashCode,
-                          $mrjc(message.hashCode, createdAt.hashCode))))))));
+                  collectionStatus.hashCode,
+                  $mrjc(deliveryPoint.hashCode,
+                      $mrjc(message.hashCode, createdAt.hashCode)))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is HudumDbResponseData &&
-          other.id == this.id &&
           other.idNumber == this.idNumber &&
           other.status == this.status &&
           other.printingStatus == this.printingStatus &&
@@ -190,8 +172,7 @@ class HudumDbResponseData extends DataClass
 }
 
 class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
-  final Value<int> id;
-  final Value<String?> idNumber;
+  final Value<String> idNumber;
   final Value<String?> status;
   final Value<String?> printingStatus;
   final Value<String?> collectionStatus;
@@ -199,7 +180,6 @@ class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
   final Value<String?> message;
   final Value<DateTime> createdAt;
   const HudumDbResponseCompanion({
-    this.id = const Value.absent(),
     this.idNumber = const Value.absent(),
     this.status = const Value.absent(),
     this.printingStatus = const Value.absent(),
@@ -209,18 +189,17 @@ class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
     this.createdAt = const Value.absent(),
   });
   HudumDbResponseCompanion.insert({
-    this.id = const Value.absent(),
-    this.idNumber = const Value.absent(),
+    required String idNumber,
     this.status = const Value.absent(),
     this.printingStatus = const Value.absent(),
     this.collectionStatus = const Value.absent(),
     this.deliveryPoint = const Value.absent(),
     this.message = const Value.absent(),
     required DateTime createdAt,
-  }) : createdAt = Value(createdAt);
+  })  : idNumber = Value(idNumber),
+        createdAt = Value(createdAt);
   static Insertable<HudumDbResponseData> custom({
-    Expression<int>? id,
-    Expression<String?>? idNumber,
+    Expression<String>? idNumber,
     Expression<String?>? status,
     Expression<String?>? printingStatus,
     Expression<String?>? collectionStatus,
@@ -229,7 +208,6 @@ class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (idNumber != null) 'id_number': idNumber,
       if (status != null) 'status': status,
       if (printingStatus != null) 'printing_status': printingStatus,
@@ -241,8 +219,7 @@ class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
   }
 
   HudumDbResponseCompanion copyWith(
-      {Value<int>? id,
-      Value<String?>? idNumber,
+      {Value<String>? idNumber,
       Value<String?>? status,
       Value<String?>? printingStatus,
       Value<String?>? collectionStatus,
@@ -250,7 +227,6 @@ class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
       Value<String?>? message,
       Value<DateTime>? createdAt}) {
     return HudumDbResponseCompanion(
-      id: id ?? this.id,
       idNumber: idNumber ?? this.idNumber,
       status: status ?? this.status,
       printingStatus: printingStatus ?? this.printingStatus,
@@ -264,11 +240,8 @@ class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (idNumber.present) {
-      map['id_number'] = Variable<String?>(idNumber.value);
+      map['id_number'] = Variable<String>(idNumber.value);
     }
     if (status.present) {
       map['status'] = Variable<String?>(status.value);
@@ -294,7 +267,6 @@ class HudumDbResponseCompanion extends UpdateCompanion<HudumDbResponseData> {
   @override
   String toString() {
     return (StringBuffer('HudumDbResponseCompanion(')
-          ..write('id: $id, ')
           ..write('idNumber: $idNumber, ')
           ..write('status: $status, ')
           ..write('printingStatus: $printingStatus, ')
@@ -312,14 +284,6 @@ class $HudumDbResponseTable extends HudumDbResponse
   final GeneratedDatabase _db;
   final String? _alias;
   $HudumDbResponseTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedIntColumn id = _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
   final VerificationMeta _idNumberMeta = const VerificationMeta('idNumber');
   @override
   late final GeneratedTextColumn idNumber = _constructIdNumber();
@@ -327,7 +291,7 @@ class $HudumDbResponseTable extends HudumDbResponse
     return GeneratedTextColumn(
       'id_number',
       $tableName,
-      true,
+      false,
     );
   }
 
@@ -403,7 +367,6 @@ class $HudumDbResponseTable extends HudumDbResponse
 
   @override
   List<GeneratedColumn> get $columns => [
-        id,
         idNumber,
         status,
         printingStatus,
@@ -424,12 +387,11 @@ class $HudumDbResponseTable extends HudumDbResponse
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
     if (data.containsKey('id_number')) {
       context.handle(_idNumberMeta,
           idNumber.isAcceptableOrUnknown(data['id_number']!, _idNumberMeta));
+    } else if (isInserting) {
+      context.missing(_idNumberMeta);
     }
     if (data.containsKey('status')) {
       context.handle(_statusMeta,
@@ -467,7 +429,7 @@ class $HudumDbResponseTable extends HudumDbResponse
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {idNumber};
   @override
   HudumDbResponseData map(Map<String, dynamic> data, {String? tablePrefix}) {
     return HudumDbResponseData.fromData(data, _db,

@@ -17,7 +17,7 @@ class HudumaResponseDao extends DatabaseAccessor<MyDatabase>
     return results.map((list) {
       return list.map((res) {
         return HudumaResponse(
-          idNumber: res.idNumber!,
+          idNumber: res.idNumber,
           status: res.status!,
           printingStatus: res.printingStatus,
           collectionStatus: res.collectionStatus,
@@ -29,7 +29,7 @@ class HudumaResponseDao extends DatabaseAccessor<MyDatabase>
   }
 
   Future<int> addRecord(HudumaResponse hudumaResponse) {
-    return into(hudumDbResponse).insert(HudumDbResponseCompanion(
+    return into(hudumDbResponse).insertOnConflictUpdate(HudumDbResponseCompanion(
       idNumber: Value(hudumaResponse.idNumber),
       status: Value(hudumaResponse.status),
       printingStatus: Value(hudumaResponse.printingStatus),
@@ -40,8 +40,8 @@ class HudumaResponseDao extends DatabaseAccessor<MyDatabase>
     ));
   }
 
-  Future updateRecord(int id, HudumaResponse hudumaResponse) {
-    return (update(hudumDbResponse)..where((tbl) => tbl.id.equals(id)))
+  Future updateRecord(String id, HudumaResponse hudumaResponse) {
+    return (update(hudumDbResponse)..where((tbl) => tbl.idNumber.equals(id)))
         .replace(HudumDbResponseCompanion(
       idNumber: Value(hudumaResponse.idNumber),
       status: Value(hudumaResponse.status),
@@ -53,7 +53,7 @@ class HudumaResponseDao extends DatabaseAccessor<MyDatabase>
     ));
   }
 
-  Future<void> deleteRecord(int id) {
-    return (delete(hudumDbResponse)..where((tbl) => tbl.id.equals(id))).go();
+  Future<void> deleteRecord(String id) {
+    return (delete(hudumDbResponse)..where((tbl) => tbl.idNumber.equals(id))).go();
   }
 }

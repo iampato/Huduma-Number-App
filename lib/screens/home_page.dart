@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return hudumaCubit;
       },
       child: Scaffold(
-        backgroundColor: Color(0xFF800000),
+        backgroundColor: Colors.red,
         resizeToAvoidBottomInset: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                  top: kToolbarHeight * 0.8,
+                  top: kToolbarHeight * 0.65,
                   left: 15,
                   right: 5,
                 ),
