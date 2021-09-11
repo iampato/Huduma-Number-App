@@ -9,6 +9,7 @@ check their huduma number status.
 * [flutter_bloc](https://pub.dev/packages/flutter_bloc) - event driven state management
 * [moor](https://pub.dev/packages/moor_flutter) - Moor is a reactive persistence library for Flutter and Dart, built on top of sqlite.
 * [Freezed](https://pub.dev/packages/freezed) - a code generator for unions/pattern-matching/copy.
+* [Dio](https://pub.dev/packages/dio) - A powerful Http client for Dart, which supports Interceptors, Global configuration, FormData, Request Cancellation, File downloading, Timeout etc.
 
 
 ## Getting Started
