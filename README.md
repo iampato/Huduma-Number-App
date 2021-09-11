@@ -39,6 +39,6 @@ The screenshot below shows the working application:
 
 |<image src="screenshots/1.png"> | <image src="screenshots/2.png"> | <image src="screenshots/3.png">|
 |:---:|:---:|:---:|
-|LogIn|Map Screen|Add Crime|Location Images|
+|Home page|Search history|Expanded item|
 
 
