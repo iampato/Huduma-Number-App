@@ -30,7 +30,7 @@ samples, guidance on mobile development, and a full API reference.
 
 The screenshot below shows the working application:
 
-|<image src="screenshots/1.png"> | <image src="screenshots/2.png"> | <image src="screenshots/3.png">|
+|<image src="screenshots/1.png"> | <image src="screenshots/3.png"> | <image src="screenshots/2.png">|
 |:---:|:---:|:---:|
 |Home page|Search history|Expanded item|
 
